@@ -5,33 +5,56 @@
     <title>시현이의 사이트</title>
 
     <style>
+        /* 버튼들을 감싸는 영역: 가로 정렬 */
         .btn-row {
             display: flex;
             gap: 10px;
-            align-items: center;
+            margin-bottom: 20px; /* 버튼 아래 여백 */
+        }
+
+        /* 버튼 디자인(옵션) */
+        .big-btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #4b8bff;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .big-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 출력 텍스트 스타일 */
+        #msg {
+            font-size: 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
+
     <h1>시현이는 천재</h1>
 
+    <!-- 버튼들을 한 줄에 배치 -->
     <div class="btn-row">
-        <button onclick="hello()">안누르면 바보</button>
-        <p id="msg1"></p>
+        <button class="big-btn" onclick="hello(1)">버튼 1</button>
+        <button class="big-btn" onclick="hello(2)">버튼 2</button>
+        <button class="big-btn" onclick="hello(3)">버튼 3</button>
     </div>
 
-    <div class="btn-row">
-        <button onclick="hello2()">이거 누르면 재미있음</button>
-        <p id="msg2"></p>
-    </div>
+    <!-- 버튼 밑에서 하나의 텍스트만 출력 -->
+    <p id="msg"></p>
 
-    <div class="btn-row">
-        <button onclick="hello3()">test</button>
-        <p id="msg3"></p>
-    </div>
+    <script>
+        function hello(num) {
+            document.getElementById("msg").innerText = num + "번 버튼 눌렀다!";
+        }
+    </script>
 
-    <script src="script.js"></script>
-    <script src="script2.js"></script>
-    <script src="script3.js"></script>
 </body>
 </html>
