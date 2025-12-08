@@ -1,4 +1,4 @@
-function hello4() {
+function hello2() {
     let msg = document.getElementById("msg2");
 
     if (msg.innerText === "") {
