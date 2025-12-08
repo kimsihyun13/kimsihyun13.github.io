@@ -1,3 +1,9 @@
 function hello5() {
-    document.getElementById("msg5").innerText = "려";
+    let msg = document.getElementById("msg5");
+
+    if (msg.innerText === "") {
+        msg.innerText = "려";  
+    } else {
+        msg.innerText = "";    
+    }
 }
