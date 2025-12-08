@@ -5,17 +5,22 @@
     <title>시현이의 사이트</title>
 
     <style>
-        /* 버튼들을 감싸는 영역: 가로 정렬 */
+        
         .btn-row {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px; /* 버튼 아래 여백 */
+            margin-bottom: 20px;
         }
 
-        /* 버튼 디자인(옵션) */
+         .haha {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+       
         .big-btn {
             padding: 12px 20px;
-            font-size: 18px;
+            font-size: 20px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
@@ -24,11 +29,22 @@
             transition: 0.2s;
         }
 
+
+        .big-btn2 {
+            padding: 12px 20px;
+            font-size: 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #ff4b4b;
+            color: white;
+            transition: 0.2s;
+        }
         .big-btn:hover {
             transform: scale(1.05);
         }
 
-        /* 출력 텍스트 스타일 */
+
         #msg {
             font-size: 20px;
             margin-top: 10px;
@@ -40,7 +56,7 @@
 
     <h1>시현이는 천재</h1>
 
-    <!-- 버튼들을 한 줄에 배치 -->
+
     <div class="btn-row">
         <button class="big-btn" onclick="hello()">시</button>
         <p id="msg1"></p>
@@ -53,10 +69,22 @@
 
     </div>
 
+
+    <div class="haha">
+        <button class="big-btn2" onclick="hello4()">응</button>
+        <p id="msg4"></p>
+
+        <button class="big-btn2" onclick="hello5()">마</button>
+        <p id="msg5"></p>
+
+    </div>
+
+
      <script src="script.js"></script>
      <script src="script2.js"></script>
-     <script src="script3.js"></script>
-    
+     <script src="script3.js"></script>     
+     <script src="script4.js"></script>
+     <script src="script5.js"></script>   
 
 </body>
 </html>
