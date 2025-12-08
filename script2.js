@@ -1,3 +1,3 @@
 function hello2() {
-    document.getElementById("msg2").innerText = "똥";
+    document.getElementById("msg2").innerText = "는";
 }
