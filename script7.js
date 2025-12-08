@@ -1,4 +1,7 @@
+let angle = 0;
+
 function hello7(event) {
-    event.target.style.transform = "rotate(360deg)";
+    angle += 360;
+    event.target.style.transform = `rotate(${angle}deg)`;
     event.target.style.transition = "0.5s";
 }
