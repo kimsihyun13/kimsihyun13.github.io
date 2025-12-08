@@ -1,3 +1,9 @@
-function hello() {
-    document.getElementById("msg1").innerText = "현";
+function hello4() {
+    let msg = document.getElementById("msg4");
+
+    if (msg.innerText === "") {
+        msg.innerText = "가";   
+    } else {
+        msg.innerText = "";    
+    }
 }
