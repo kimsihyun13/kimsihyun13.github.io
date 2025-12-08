@@ -1,3 +1,9 @@
 function hello4() {
-    document.getElementById("msg4").innerText = "가";
+    let msg = document.getElementById("msg4");
+
+    if (msg.innerText === "") {
+        msg.innerText = "가";  
+    } else {
+        msg.innerText = "";    
+    }
 }
