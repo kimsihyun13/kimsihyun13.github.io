@@ -1,0 +1,10 @@
+.big-btn2 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #ff4b4b;
+    color: white;
+    transition: 0.2s;
+}
