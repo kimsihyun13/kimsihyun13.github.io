@@ -1,0 +1,189 @@
+aside {
+  width: 20%;
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  float: right;
+  box-shadow: inset 5px 0 5px -5px #29627e;
+  font-style: italic;
+  color: #29627e;
+}
+
+aside > p {
+  margin: 0.5rem;
+}
+
+.big-btn:hover {
+    transform: scale(1.05);
+}
+
+.big-btn {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #4b8bff;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn2 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #ff4b4b;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn3 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #ffd54b;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn4 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #db4bff;
+    color: white;
+    transition: 0.2s;
+}
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.haha {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.hoho {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.big-btn {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #4b8bff;
+    color: white;
+    transition: 0.2s;
+}
+
+
+.flex-item {
+    width: 100%;    
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 22px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+.flex-container {
+    display: flex;
+    flex-direction: column; 
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: seashell;
+    width: 150px;
+    gap: 6px   
+}
+
+.flex-item {
+    width: 100%;   
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.color-red{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: darksalmon;
+    color: white;
+    transition: 0.2s;
+}
+.color-blue{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: dodgerblue;
+    color: white;
+    transition: 0.2s;
+}
+.color-green{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: forestgreen;
+    color: white;
+    transition: 0.2s;
+}
+.color-yellow{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: gold;
+    color: white;
+    transition: 0.2s;
+}
+.color-pupple{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: rebeccapurple;
+    color: white;
+    transition: 0.2s;
+}
+.color-orange{
+    padding: 1px 1px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: orange;
+    color: white;
+    transition: 0.2s;
+}
