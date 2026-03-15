@@ -1,4 +1,4 @@
-// Doodle Jump Game - Improved Version
+// Doodle Jump Game - Fixed Full Version
 
 const GAME_CONFIG = {
   width: 375,
@@ -19,310 +19,352 @@ const ASSETS = {
 
 class DoodleJumpScene extends Phaser.Scene {
 
-  constructor(){
-    super({key:"DoodleJumpScene"});
-  }
+constructor(){
+super({key:"DoodleJumpScene"});
+}
 
-  preload(){
+preload(){
 
-    this.load.image("background",ASSETS.background);
-    this.load.image("player",ASSETS.player);
-    this.load.image("platform",ASSETS.normalPlatform);
-    this.load.image("enemy",ASSETS.enemy);
-    this.load.image("bullet",ASSETS.bullet);
+this.load.image("background",ASSETS.background);
+this.load.image("player",ASSETS.player);
+this.load.image("platform",ASSETS.normalPlatform);
+this.load.image("enemy",ASSETS.enemy);
+this.load.image("bullet",ASSETS.bullet);
 
-  }
+}
 
-  create(){
+create(){
 
-    this.gameOver=false;
-    this.score=0;
-    this.highScore=localStorage.getItem("doodle_highscore")||0;
+this.gameOver=false;
+this.score=0;
 
-    this.add.image(0,0,"background").setOrigin(0);
+this.highScore=localStorage.getItem("doodle_highscore")||0;
 
-    this.platforms=this.physics.add.group();
-    this.enemies=this.physics.add.group();
-    this.bullets=this.physics.add.group();
+this.add.image(0,0,"background").setOrigin(0);
 
-    this.player=this.physics.add.sprite(200,400,"player");
+this.platforms=this.physics.add.group();
+this.enemies=this.physics.add.group();
+this.bullets=this.physics.add.group();
 
-    this.player.setScale(0.1);
+this.player=this.physics.add.sprite(200,400,"player");
 
-    this.player.body.setGravityY(GAME_CONFIG.gravity);
+this.player.setScale(0.1);
 
-    this.cursors=this.input.keyboard.createCursorKeys();
+this.player.body.setGravityY(GAME_CONFIG.gravity);
 
-    this.createPlatform(200,480);
+this.cursors=this.input.keyboard.createCursorKeys();
 
-    this.createUI();
+this.lastPlatformY = GAME_CONFIG.height-20;
 
-    this.startScreen();
+// 초기 발판
+for(let i=0;i<6;i++){
 
-    this.setupCollisions();
+this.lastPlatformY -= GAME_CONFIG.platformSpacing
 
-  }
+const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
 
-  startScreen(){
+this.createPlatform(x,this.lastPlatformY)
 
-    this.startOverlay=this.add.rectangle(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2,
-      GAME_CONFIG.width,
-      GAME_CONFIG.height,
-      0x000000,
-      0.6
-    );
+}
 
-    this.startText=this.add.text(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2,
-      "클릭하여 시작",
-      {fontSize:"28px",fill:"#ffffff"}
-    ).setOrigin(0.5);
+this.createUI();
 
-    this.physics.pause();
+this.setupCollisions();
 
-    this.input.once("pointerdown",()=>{
+this.cameras.main.startFollow(this.player,true,0.1,0.1);
 
-      this.startOverlay.destroy();
-      this.startText.destroy();
+this.startScreen();
 
-      this.physics.resume();
+}
 
-      this.player.setVelocityY(-GAME_CONFIG.jumpPower);
+startScreen(){
 
-    });
+this.startOverlay=this.add.rectangle(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+GAME_CONFIG.width,
+GAME_CONFIG.height,
+0x000000,
+0.6
+).setScrollFactor(0).setDepth(999);
 
-  }
+this.startText=this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+"클릭하여 시작",
+{fontSize:"28px",fill:"#ffffff"}
+).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
 
-  createPlatform(x,y){
+this.physics.pause();
 
-    const platform=this.physics.add.sprite(x,y,"platform");
+this.input.once("pointerdown",()=>{
 
-    platform.setScale(0.15);
+this.startOverlay.destroy();
+this.startText.destroy();
 
-    platform.body.setImmovable(true);
-    platform.body.setAllowGravity(false);
+this.physics.resume();
 
-    this.platforms.add(platform);
+this.player.setVelocityY(-GAME_CONFIG.jumpPower);
 
-    if(Phaser.Math.Between(1,100)<10){
+});
 
-      this.createEnemy(x,y-60);
+}
 
-    }
+createPlatform(x,y){
 
-  }
+const platform=this.physics.add.sprite(x,y,"platform");
 
-  createEnemy(x,y){
+platform.setScale(0.15);
 
-    const enemy=this.physics.add.sprite(x,y,"enemy");
+platform.body.setImmovable(true);
+platform.body.setAllowGravity(false);
 
-    enemy.setScale(0.06);
+this.platforms.add(platform);
 
-    enemy.body.setAllowGravity(false);
+if(Phaser.Math.Between(1,100)<10){
 
-    enemy.direction=Phaser.Math.Between(0,1)?-1:1;
+this.createEnemy(x,y-60);
 
-    enemy.body.setVelocityX(enemy.direction*60);
+}
 
-    this.enemies.add(enemy);
+}
 
-  }
+createEnemy(x,y){
 
-  createUI(){
+const enemy=this.physics.add.sprite(x,y,"enemy");
 
-    this.scoreText=this.add.text(10,10,"점수:0",{
-      fontSize:"18px",
-      fill:"#000",
-      stroke:"#fff",
-      strokeThickness:3
-    }).setScrollFactor(0);
+enemy.setScale(0.06);
 
-    this.highScoreText=this.add.text(10,35,`최고점:${this.highScore}`,{
-      fontSize:"14px",
-      fill:"#000",
-      stroke:"#fff",
-      strokeThickness:2
-    }).setScrollFactor(0);
+enemy.body.setAllowGravity(false);
 
-  }
+enemy.direction=Phaser.Math.Between(0,1)?-1:1;
 
-  setupCollisions(){
+enemy.body.setVelocityX(enemy.direction*60);
 
-    this.physics.add.overlap(this.player,this.platforms,(player,platform)=>{
+this.enemies.add(enemy);
 
-      if(player.body.velocity.y>0 && player.y<platform.y){
+}
 
-        this.jump();
+createUI(){
 
-      }
+this.scoreText=this.add.text(10,10,"점수:0",{
+fontSize:"18px",
+fill:"#000",
+stroke:"#fff",
+strokeThickness:3
+}).setScrollFactor(0);
 
-    });
+this.highScoreText=this.add.text(10,35,`최고점:${this.highScore}`,{
+fontSize:"14px",
+fill:"#000",
+stroke:"#fff",
+strokeThickness:2
+}).setScrollFactor(0);
 
-    this.physics.add.overlap(this.player,this.enemies,(player,enemy)=>{
+}
 
-      if(player.body.velocity.y>0 && player.y<enemy.y){
+setupCollisions(){
 
-        this.cameras.main.shake(100,0.01);
+this.physics.add.overlap(this.player,this.platforms,(player,platform)=>{
 
-        if(navigator.vibrate) navigator.vibrate(50);
+if(player.body.velocity.y>0 && player.y<platform.y){
 
-        enemy.destroy();
+this.jump();
 
-        this.score+=100;
+}
 
-        this.jump();
+});
 
-      }else{
+this.physics.add.overlap(this.player,this.enemies,(player,enemy)=>{
 
-        this.triggerGameOver();
+if(player.body.velocity.y>0 && player.y<enemy.y){
 
-      }
+this.cameras.main.shake(100,0.01);
 
-    });
+if(navigator.vibrate) navigator.vibrate(50);
 
-  }
+enemy.destroy();
 
-  jump(){
+this.score+=100;
 
-    this.player.setVelocityY(-GAME_CONFIG.jumpPower);
+this.jump();
 
-  }
+}else{
 
-  shoot(){
+this.triggerGameOver();
 
-    const bullet=this.physics.add.sprite(this.player.x,this.player.y-30,"bullet");
+}
 
-    bullet.setVelocityY(-400);
+});
 
-    this.bullets.add(bullet);
+}
 
-  }
+jump(){
 
-  triggerGameOver(){
+this.player.setVelocityY(-GAME_CONFIG.jumpPower);
 
-    this.gameOver=true;
+}
 
-    this.tweens.add({
+triggerGameOver(){
 
-      targets:this.player,
-      angle:360,
-      duration:800
+this.gameOver=true;
 
-    });
+this.tweens.add({
 
-    if(this.score>this.highScore){
+targets:this.player,
+angle:360,
+duration:800
 
-      localStorage.setItem("doodle_highscore",this.score);
+});
 
-    }
+if(this.score>this.highScore){
 
-    this.time.delayedCall(800,()=>{
+localStorage.setItem("doodle_highscore",this.score);
 
-      this.showGameOver();
+}
 
-    });
+this.time.delayedCall(800,()=>{
 
-  }
+this.showGameOver();
 
-  showGameOver(){
+});
 
-    const overlay=this.add.rectangle(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2,
-      GAME_CONFIG.width,
-      GAME_CONFIG.height,
-      0x000000,
-      0.7
-    );
+}
 
-    this.add.text(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2-40,
-      "GAME OVER",
-      {fontSize:"32px",fill:"#ff3333"}
-    ).setOrigin(0.5);
+showGameOver(){
 
-    this.add.text(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2,
-      `점수:${this.score}`,
-      {fontSize:"22px",fill:"#ffffff"}
-    ).setOrigin(0.5);
+const overlay=this.add.rectangle(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+GAME_CONFIG.width,
+GAME_CONFIG.height,
+0x000000,
+0.7
+).setScrollFactor(0).setDepth(999);
 
-    this.add.text(
-      GAME_CONFIG.width/2,
-      GAME_CONFIG.height/2+40,
-      "클릭하여 재시작",
-      {fontSize:"18px",fill:"#ffffff"}
-    ).setOrigin(0.5);
+this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2-40,
+"GAME OVER",
+{fontSize:"32px",fill:"#ff3333"}
+).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
 
-    this.input.once("pointerdown",()=>{
+this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+`점수:${this.score}`,
+{fontSize:"22px",fill:"#ffffff"}
+).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
 
-      this.scene.restart();
+this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2+40,
+"클릭하여 재시작",
+{fontSize:"18px",fill:"#ffffff"}
+).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
 
-    });
+this.input.once("pointerdown",()=>{
 
-  }
+this.scene.restart();
 
-  update(){
+});
 
-    if(this.gameOver) return;
+}
 
-    if(this.cursors.left.isDown){
+update(){
 
-      this.player.setVelocityX(-GAME_CONFIG.moveSpeed);
+if(this.gameOver) return;
 
-    }
-    else if(this.cursors.right.isDown){
+if(this.cursors.left.isDown){
 
-      this.player.setVelocityX(GAME_CONFIG.moveSpeed);
+this.player.setVelocityX(-GAME_CONFIG.moveSpeed);
 
-    }
-    else{
+}else if(this.cursors.right.isDown){
 
-      this.player.setVelocityX(0);
+this.player.setVelocityX(GAME_CONFIG.moveSpeed);
 
-    }
+}else{
 
-    if(this.player.y>GAME_CONFIG.height+100){
+this.player.setVelocityX(0);
 
-      this.triggerGameOver();
+}
 
-    }
+// 플랫폼 생성
+while(this.lastPlatformY > this.player.y - 600){
 
-    this.scoreText.setText(`점수:${this.score}`);
+this.lastPlatformY -= GAME_CONFIG.platformSpacing
 
-  }
+const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
+
+this.createPlatform(x,this.lastPlatformY)
+
+}
+
+// 화면 밖 플랫폼 삭제
+this.platforms.children.entries.forEach(p=>{
+
+if(p.y > this.player.y + 800){
+
+p.destroy()
+
+}
+
+})
+
+// 적 벽 충돌 이동
+this.enemies.children.entries.forEach(e=>{
+
+if(e.x < 30){
+
+e.body.setVelocityX(60)
+
+}
+
+if(e.x > GAME_CONFIG.width-30){
+
+e.body.setVelocityX(-60)
+
+}
+
+})
+
+// 추락
+if(this.player.y > this.cameras.main.scrollY + GAME_CONFIG.height + 100){
+
+this.triggerGameOver();
+
+}
+
+this.scoreText.setText(`점수:${this.score}`);
+
+}
 
 }
 
 const gameConfig={
 
-  type:Phaser.AUTO,
+type:Phaser.AUTO,
 
-  width:GAME_CONFIG.width,
+width:GAME_CONFIG.width,
 
-  height:GAME_CONFIG.height,
+height:GAME_CONFIG.height,
 
-  parent:"game-canvas",
+parent:"game-canvas",
 
-  physics:{
-    default:"arcade",
-    arcade:{
-      gravity:{y:0},
-      debug:false
-    }
-  },
+physics:{
+default:"arcade",
+arcade:{
+gravity:{y:0},
+debug:false
+}
+},
 
-  scale:{
-    mode:Phaser.Scale.FIT,
-    autoCenter:Phaser.Scale.CENTER_BOTH
-  },
+scale:{
+mode:Phaser.Scale.FIT,
+autoCenter:Phaser.Scale.CENTER_BOTH
+},
 
-  scene:[DoodleJumpScene]
+scene:[DoodleJumpScene]
 
 };
 
