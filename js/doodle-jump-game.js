@@ -1,12 +1,11 @@
-// Doodle Jump Game - ULTRA Upgrade
-// 기존 기능 유지 + 확장
+// Doodle Jump Game - Fixed & Upgraded
 
 const GAME_CONFIG = {
   width: 375,
   height: 500,
   gravity: 700,
   jumpPower: 450,
-  moveSpeed: 220,
+  moveSpeed: 200,
   platformSpacing: 70
 };
 
@@ -35,7 +34,7 @@ super({key:'DoodleJumpScene'})
 }
 
 preload(){
-for(const key in ASSETS){
+for(let key in ASSETS){
 this.load.image(key,ASSETS[key])
 }
 }
@@ -44,18 +43,10 @@ create(){
 
 this.gameOver=false
 this.score=0
-this.combo=0
-this.highScore=localStorage.getItem("doodleHighScore")||0
 this.highestY=0
 this.lastPlatformY=GAME_CONFIG.height-100
 
-this.background=this.add.tileSprite(
-GAME_CONFIG.width/2,
-GAME_CONFIG.height/2,
-GAME_CONFIG.width,
-GAME_CONFIG.height,
-'background'
-).setScrollFactor(0)
+this.createBackground()
 
 this.platforms=this.add.group()
 this.enemies=this.add.group()
@@ -78,6 +69,18 @@ this.player.body.setVelocityY(-GAME_CONFIG.jumpPower)
 
 }
 
+createBackground(){
+
+this.background=this.add.tileSprite(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+GAME_CONFIG.width,
+GAME_CONFIG.height,
+'background'
+).setScrollFactor(0)
+
+}
+
 createPlayer(){
 
 this.player=this.physics.add.sprite(
@@ -88,6 +91,7 @@ GAME_CONFIG.height-150,
 
 this.player.setScale(0.1)
 this.player.setOrigin(0.5,1)
+
 this.player.body.setGravityY(GAME_CONFIG.gravity)
 
 this.player.facingDirection='right'
@@ -124,17 +128,17 @@ spring:'springPlatform'
 const platform=this.physics.add.sprite(x,y,map[type])
 
 platform.setScale(0.15)
+platform.setOrigin(0.5,0.5)
+
 platform.body.setAllowGravity(false)
 platform.body.setImmovable(true)
 
 platform.platformType=type
 platform.hasBeenStepped=false
 
-if(type==="moving"){
-
-platform.direction=Phaser.Math.Between(0,1)?1:-1
+if(type==='moving'){
+platform.direction=Phaser.Math.Between(0,1)?-1:1
 platform.body.setVelocityX(platform.direction*80)
-
 }
 
 this.platforms.add(platform)
@@ -145,10 +149,10 @@ getRandomPlatformType(){
 
 const r=Phaser.Math.Between(1,100)
 
-if(r<=60) return "normal"
-if(r<=80) return "breaking"
-if(r<=95) return "moving"
-return "spring"
+if(r<=60) return 'normal'
+if(r<=80) return 'breaking'
+if(r<=95) return 'moving'
+return 'spring'
 
 }
 
@@ -182,7 +186,50 @@ this.physics.add.overlap(this.player,this.platforms,(player,platform)=>{
 
 if(player.body.velocity.y>0 && player.y<platform.y){
 
+switch(platform.platformType){
+
+case 'normal':
+case 'moving':
 this.jump()
+break
+
+case 'breaking':
+
+if(!platform.hasBeenStepped){
+
+platform.hasBeenStepped=true
+this.jump()
+
+this.time.delayedCall(100,()=>{
+
+this.tweens.add({
+targets:platform,
+alpha:0,
+duration:200,
+onComplete:()=>platform.destroy()
+})
+
+})
+
+}
+
+break
+
+case 'spring':
+
+this.player.body.setVelocityY(-GAME_CONFIG.jumpPower*1.6)
+
+platform.setTexture('springPlatformCompressed')
+
+this.time.delayedCall(200,()=>{
+if(platform.active){
+platform.setTexture('springPlatform')
+}
+})
+
+break
+
+}
 
 }
 
@@ -191,16 +238,12 @@ this.jump()
 }
 
 jump(){
-
-let vel=-GAME_CONFIG.jumpPower
-this.player.body.setVelocityY(vel)
-
+this.player.body.setVelocityY(-GAME_CONFIG.jumpPower)
 }
 
 shoot(){
 
 const now=this.time.now
-
 if(now-this.player.lastShootTime<300) return
 
 this.player.lastShootTime=now
@@ -213,7 +256,7 @@ this.player.y-30,
 
 bullet.setScale(0.1)
 
-if(this.player.facingDirection==="left"){
+if(this.player.facingDirection==='left'){
 bullet.body.setVelocity(-200,-350)
 }else{
 bullet.body.setVelocity(200,-350)
@@ -232,13 +275,6 @@ fontSize:'18px',
 fill:'#000',
 stroke:'#fff',
 strokeThickness:3
-}).setScrollFactor(0)
-
-this.highText=this.add.text(10,35,'최고:'+this.highScore,{
-fontSize:'14px',
-fill:'#000',
-stroke:'#fff',
-strokeThickness:2
 }).setScrollFactor(0)
 
 }
@@ -266,7 +302,7 @@ GAME_CONFIG.height/2-60,
 const score=this.add.text(
 GAME_CONFIG.width/2,
 GAME_CONFIG.height/2,
-"점수 "+this.score,
+`점수 ${this.score}`,
 {fontSize:'24px',fill:'#fff'}
 ).setOrigin(0.5)
 
@@ -287,13 +323,7 @@ repeat:-1,
 duration:500
 })
 
-if(this.score>this.highScore){
-
-localStorage.setItem("doodleHighScore",this.score)
-
-}
-
-this.input.once("pointerdown",()=>{
+this.input.once('pointerdown',()=>{
 this.scene.restart()
 })
 
@@ -318,14 +348,14 @@ if(this.cursors.left.isDown || this.touchLeft){
 
 this.player.body.setVelocityX(-GAME_CONFIG.moveSpeed)
 this.player.setFlipX(true)
-this.player.facingDirection="left"
+this.player.facingDirection='left'
 
 }
 else if(this.cursors.right.isDown || this.touchRight){
 
 this.player.body.setVelocityX(GAME_CONFIG.moveSpeed)
 this.player.setFlipX(false)
-this.player.facingDirection="right"
+this.player.facingDirection='right'
 
 }
 else{
@@ -363,7 +393,7 @@ updatePlatforms(){
 
 this.platforms.children.entries.forEach(p=>{
 
-if(p.platformType==="moving"){
+if(p.platformType==='moving'){
 
 const half=(p.width*p.scaleX)/2
 
@@ -383,17 +413,11 @@ const height=Math.floor((GAME_CONFIG.height-this.player.y)/10)
 if(height>this.highestY){
 
 this.highestY=height
-this.combo++
-
-this.score+=10*this.combo
-
-}else{
-
-this.combo=0
+this.score+=10
 
 }
 
-this.scoreText.setText("점수:"+this.score)
+this.scoreText.setText(`점수:${this.score}`)
 
 }
 
@@ -409,7 +433,9 @@ if(p.y>limit)p.destroy()
 
 checkFall(){
 
-if(this.player.y>this.cameras.main.scrollY+GAME_CONFIG.height+100){
+const fallLimit = this.lastPlatformY + GAME_CONFIG.platformSpacing * 7
+
+if(this.player.y > fallLimit){
 
 this.gameOver=true
 this.showGameOver()
