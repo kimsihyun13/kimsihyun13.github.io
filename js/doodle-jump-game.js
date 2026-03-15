@@ -32,8 +32,7 @@ this.load.image(key,ASSETS[key])
 create(){
 
 this.gameOver=false
-this.score=0
-this.highestY=0
+this.gameStarted=false
 this.lastPlatformY=GAME_CONFIG.height-50
 
 // 배경
@@ -45,32 +44,10 @@ GAME_CONFIG.height/2,
 .setDisplaySize(GAME_CONFIG.width,GAME_CONFIG.height)
 .setScrollFactor(0)
 
-// 그룹
+// 발판 그룹
 this.platforms=this.add.group()
 
 // 플레이어
-this.createPlayer()
-
-// 시작 발판
-this.createPlatform(GAME_CONFIG.width/2,GAME_CONFIG.height-50,'normal')
-
-for(let i=1;i<=6;i++){
-const y=GAME_CONFIG.height-50-(i*GAME_CONFIG.platformSpacing)
-const x=Phaser.Math.Between(60,GAME_CONFIG.width-60)
-this.createPlatform(x,y,'normal')
-this.lastPlatformY=y
-}
-
-// 키 입력
-this.cursors=this.input.keyboard.createCursorKeys()
-
-// 충돌
-this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
-
-}
-
-createPlayer(){
-
 this.player=this.physics.add.sprite(
 GAME_CONFIG.width/2,
 GAME_CONFIG.height-150,
@@ -80,6 +57,46 @@ GAME_CONFIG.height-150,
 this.player.setScale(0.1)
 this.player.setOrigin(0.5,1)
 this.player.body.setGravityY(GAME_CONFIG.gravity)
+
+// 시작 발판
+this.createPlatform(GAME_CONFIG.width/2,GAME_CONFIG.height-50,'normal')
+
+for(let i=1;i<=6;i++){
+
+const y=GAME_CONFIG.height-50-(i*GAME_CONFIG.platformSpacing)
+const x=Phaser.Math.Between(60,GAME_CONFIG.width-60)
+
+this.createPlatform(x,y,'normal')
+
+this.lastPlatformY=y
+
+}
+
+// 키 입력
+this.cursors=this.input.keyboard.createCursorKeys()
+
+// 충돌
+this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
+
+// 시작 화면
+this.startText = this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+"탭 하여 시작",
+{
+fontSize:"32px",
+fill:"#000",
+stroke:"#fff",
+strokeThickness:6
+}
+)
+.setOrigin(0.5)
+.setScrollFactor(0)
+
+this.input.once("pointerdown",()=>{
+this.gameStarted=true
+this.startText.destroy()
+})
 
 }
 
@@ -117,7 +134,7 @@ switch(platform.platformType){
 
 case 'normal':
 case 'moving':
-this.jump()
+player.body.setVelocityY(-GAME_CONFIG.jumpPower)
 break
 
 case 'breaking':
@@ -125,7 +142,7 @@ case 'breaking':
 if(!platform.hasBeenStepped){
 
 platform.hasBeenStepped=true
-this.jump()
+player.body.setVelocityY(-GAME_CONFIG.jumpPower)
 
 this.time.delayedCall(100,()=>{
 platform.destroy()
@@ -155,29 +172,12 @@ break
 
 }
 
-jump(){
-this.player.body.setVelocityY(-GAME_CONFIG.jumpPower)
-}
-
 update(){
 
+if(!this.gameStarted) return
 if(this.gameOver) return
 
-this.updateMovement()
-this.updateCamera()
-this.generatePlatforms()
-this.updatePlatforms()
-this.checkFall()
-
-// 바닥 닿으면 죽음
-if(this.player.y>=GAME_CONFIG.height-5){
-this.triggerGameOver()
-}
-
-}
-
-updateMovement(){
-
+// 좌우 이동
 if(this.cursors.left.isDown){
 this.player.body.setVelocityX(-GAME_CONFIG.moveSpeed)
 }
@@ -192,45 +192,23 @@ this.player.body.setVelocityX(0)
 if(this.player.x<0) this.player.x=GAME_CONFIG.width
 if(this.player.x>GAME_CONFIG.width) this.player.x=0
 
-}
-
-updateCamera(){
-
+// 카메라
 if(this.player.y < this.cameras.main.scrollY + GAME_CONFIG.height/2){
 this.cameras.main.scrollY = this.player.y - GAME_CONFIG.height/2
 }
 
-}
-
-generatePlatforms(){
-
+// 발판 생성
 while(this.lastPlatformY > this.cameras.main.scrollY - 100){
 
 this.lastPlatformY -= GAME_CONFIG.platformSpacing
 
 const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
 
-const type = this.getPlatformType()
-
-this.createPlatform(x,this.lastPlatformY,type)
+this.createPlatform(x,this.lastPlatformY,'normal')
 
 }
 
-}
-
-getPlatformType(){
-
-const r=Phaser.Math.Between(1,100)
-
-if(r<60) return 'normal'
-if(r<80) return 'breaking'
-if(r<95) return 'moving'
-return 'spring'
-
-}
-
-updatePlatforms(){
-
+// moving 발판 이동
 this.platforms.children.each(p=>{
 
 if(p.platformType==='moving'){
@@ -242,11 +220,10 @@ if(p.x>GAME_CONFIG.width-30) p.body.setVelocityX(-80)
 
 })
 
-}
+// 화면 바닥 Game Over
+const screenBottom = this.cameras.main.scrollY + GAME_CONFIG.height
 
-checkFall(){
-
-if(this.player.y > this.cameras.main.scrollY + GAME_CONFIG.height + GAME_CONFIG.platformSpacing*7){
+if(this.player.y > screenBottom){
 this.triggerGameOver()
 }
 
