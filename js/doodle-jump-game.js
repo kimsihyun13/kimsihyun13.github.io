@@ -184,7 +184,7 @@ player.body.setVelocityY(-GAME_CONFIG.jumpPower*1.6)
 
 platform.setTexture('springPlatformCompressed')
 
-this.time.delayedCall(200(()=>{
+this.time.delayedCall(200, ()=>{
 if(platform.active){
 platform.setTexture('springPlatform')
 }
