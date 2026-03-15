@@ -1,5 +1,4 @@
-// Doodle Jump Game - Fixed Full Version
-
+// ========== 게임 설정 ==========
 const GAME_CONFIG = {
   width: 375,
   height: 500,
@@ -9,6 +8,7 @@ const GAME_CONFIG = {
   platformSpacing: 70
 };
 
+// ========== 이미지 URL ==========
 const ASSETS = {
   background: "https://cdn-game-mcp.gambo.ai/c3fddd74-f57b-4263-b4c9-2eaf874961c7/images/refined_notebook_grid_background.png",
   player: "https://cdn-game-mcp.gambo.ai/63eb673b-c1c0-4c91-9b56-f4c500793223/images/small_doodle_creature_idle.png",
@@ -38,8 +38,6 @@ create(){
 this.gameOver=false;
 this.score=0;
 
-this.highScore=localStorage.getItem("doodle_highscore")||0;
-
 this.add.image(0,0,"background").setOrigin(0);
 
 this.platforms=this.physics.add.group();
@@ -47,66 +45,30 @@ this.enemies=this.physics.add.group();
 this.bullets=this.physics.add.group();
 
 this.player=this.physics.add.sprite(200,400,"player");
-
 this.player.setScale(0.1);
-
 this.player.body.setGravityY(GAME_CONFIG.gravity);
 
 this.cursors=this.input.keyboard.createCursorKeys();
 
-this.lastPlatformY = GAME_CONFIG.height-20;
+this.lastPlatformY = GAME_CONFIG.height - 100;
 
-// 초기 발판
+// 초기 발판 생성
 for(let i=0;i<6;i++){
 
-this.lastPlatformY -= GAME_CONFIG.platformSpacing
+const x = Phaser.Math.Between(60, GAME_CONFIG.width-60);
+const y = this.lastPlatformY - (i * GAME_CONFIG.platformSpacing);
 
-const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
-
-this.createPlatform(x,this.lastPlatformY)
+this.createPlatform(x,y);
 
 }
-
-this.createUI();
-
-this.setupCollisions();
 
 this.cameras.main.startFollow(this.player,true,0.1,0.1);
 
-this.startScreen();
+this.setupCollisions();
 
-}
-
-startScreen(){
-
-this.startOverlay=this.add.rectangle(
-GAME_CONFIG.width/2,
-GAME_CONFIG.height/2,
-GAME_CONFIG.width,
-GAME_CONFIG.height,
-0x000000,
-0.6
-).setScrollFactor(0).setDepth(999);
-
-this.startText=this.add.text(
-GAME_CONFIG.width/2,
-GAME_CONFIG.height/2,
-"클릭하여 시작",
-{fontSize:"28px",fill:"#ffffff"}
-).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
-
-this.physics.pause();
-
-this.input.once("pointerdown",()=>{
-
-this.startOverlay.destroy();
-this.startText.destroy();
-
-this.physics.resume();
+this.createUI();
 
 this.player.setVelocityY(-GAME_CONFIG.jumpPower);
-
-});
 
 }
 
@@ -115,13 +77,12 @@ createPlatform(x,y){
 const platform=this.physics.add.sprite(x,y,"platform");
 
 platform.setScale(0.15);
-
 platform.body.setImmovable(true);
 platform.body.setAllowGravity(false);
 
 this.platforms.add(platform);
 
-if(Phaser.Math.Between(1,100)<10){
+if(Phaser.Math.Between(1,100) <= 10){
 
 this.createEnemy(x,y-60);
 
@@ -134,12 +95,10 @@ createEnemy(x,y){
 const enemy=this.physics.add.sprite(x,y,"enemy");
 
 enemy.setScale(0.06);
-
 enemy.body.setAllowGravity(false);
 
-enemy.direction=Phaser.Math.Between(0,1)?-1:1;
-
-enemy.body.setVelocityX(enemy.direction*60);
+enemy.direction = Phaser.Math.Between(0,1) ? -1 : 1;
+enemy.body.setVelocityX(enemy.direction * 60);
 
 this.enemies.add(enemy);
 
@@ -147,18 +106,11 @@ this.enemies.add(enemy);
 
 createUI(){
 
-this.scoreText=this.add.text(10,10,"점수:0",{
+this.scoreText=this.add.text(10,10,"점수: 0",{
 fontSize:"18px",
 fill:"#000",
 stroke:"#fff",
 strokeThickness:3
-}).setScrollFactor(0);
-
-this.highScoreText=this.add.text(10,35,`최고점:${this.highScore}`,{
-fontSize:"14px",
-fill:"#000",
-stroke:"#fff",
-strokeThickness:2
 }).setScrollFactor(0);
 
 }
@@ -167,7 +119,7 @@ setupCollisions(){
 
 this.physics.add.overlap(this.player,this.platforms,(player,platform)=>{
 
-if(player.body.velocity.y>0 && player.y<platform.y){
+if(player.body.velocity.y>0 && player.y < platform.y){
 
 this.jump();
 
@@ -177,21 +129,16 @@ this.jump();
 
 this.physics.add.overlap(this.player,this.enemies,(player,enemy)=>{
 
-if(player.body.velocity.y>0 && player.y<enemy.y){
-
-this.cameras.main.shake(100,0.01);
-
-if(navigator.vibrate) navigator.vibrate(50);
+if(player.body.velocity.y>0 && player.y < enemy.y){
 
 enemy.destroy();
-
 this.score+=100;
-
 this.jump();
 
 }else{
 
-this.triggerGameOver();
+this.gameOver=true;
+this.showGameOver();
 
 }
 
@@ -205,29 +152,19 @@ this.player.setVelocityY(-GAME_CONFIG.jumpPower);
 
 }
 
-triggerGameOver(){
+generatePlatforms(){
 
-this.gameOver=true;
+const generateThreshold = this.cameras.main.scrollY - 200;
 
-this.tweens.add({
+while(this.lastPlatformY > generateThreshold){
 
-targets:this.player,
-angle:360,
-duration:800
+this.lastPlatformY -= GAME_CONFIG.platformSpacing;
 
-});
+const x = Phaser.Math.Between(60, GAME_CONFIG.width - 60);
 
-if(this.score>this.highScore){
-
-localStorage.setItem("doodle_highscore",this.score);
+this.createPlatform(x, this.lastPlatformY);
 
 }
-
-this.time.delayedCall(800,()=>{
-
-this.showGameOver();
-
-});
 
 }
 
@@ -240,28 +177,28 @@ GAME_CONFIG.width,
 GAME_CONFIG.height,
 0x000000,
 0.7
-).setScrollFactor(0).setDepth(999);
+).setScrollFactor(0);
 
 this.add.text(
 GAME_CONFIG.width/2,
 GAME_CONFIG.height/2-40,
 "GAME OVER",
 {fontSize:"32px",fill:"#ff3333"}
-).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
+).setOrigin(0.5).setScrollFactor(0);
 
 this.add.text(
 GAME_CONFIG.width/2,
 GAME_CONFIG.height/2,
-`점수:${this.score}`,
+`점수: ${this.score}`,
 {fontSize:"22px",fill:"#ffffff"}
-).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
+).setOrigin(0.5).setScrollFactor(0);
 
 this.add.text(
 GAME_CONFIG.width/2,
 GAME_CONFIG.height/2+40,
 "클릭하여 재시작",
 {fontSize:"18px",fill:"#ffffff"}
-).setOrigin(0.5).setScrollFactor(0).setDepth(1000);
+).setOrigin(0.5).setScrollFactor(0);
 
 this.input.once("pointerdown",()=>{
 
@@ -274,6 +211,9 @@ this.scene.restart();
 update(){
 
 if(this.gameOver) return;
+
+// ⭐ 발판 생성
+this.generatePlatforms();
 
 if(this.cursors.left.isDown){
 
@@ -289,53 +229,22 @@ this.player.setVelocityX(0);
 
 }
 
-// 플랫폼 생성
-while(this.lastPlatformY > this.player.y - 600){
-
-this.lastPlatformY -= GAME_CONFIG.platformSpacing
-
-const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
-
-this.createPlatform(x,this.lastPlatformY)
-
-}
-
-// 화면 밖 플랫폼 삭제
-this.platforms.children.entries.forEach(p=>{
-
-if(p.y > this.player.y + 800){
-
-p.destroy()
-
-}
-
-})
-
-// 적 벽 충돌 이동
+// 적 벽 반사
 this.enemies.children.entries.forEach(e=>{
 
-if(e.x < 30){
+if(e.x < 30) e.body.setVelocityX(60);
+if(e.x > GAME_CONFIG.width-30) e.body.setVelocityX(-60);
 
-e.body.setVelocityX(60)
+});
 
-}
-
-if(e.x > GAME_CONFIG.width-30){
-
-e.body.setVelocityX(-60)
-
-}
-
-})
-
-// 추락
 if(this.player.y > this.cameras.main.scrollY + GAME_CONFIG.height + 100){
 
-this.triggerGameOver();
+this.gameOver=true;
+this.showGameOver();
 
 }
 
-this.scoreText.setText(`점수:${this.score}`);
+this.scoreText.setText(`점수: ${this.score}`);
 
 }
 
@@ -344,11 +253,8 @@ this.scoreText.setText(`점수:${this.score}`);
 const gameConfig={
 
 type:Phaser.AUTO,
-
 width:GAME_CONFIG.width,
-
 height:GAME_CONFIG.height,
-
 parent:"game-canvas",
 
 physics:{
