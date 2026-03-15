@@ -1,244 +1,267 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>시현이의 사이트</title>
+<meta charset="UTF-8">
+<title>시현이의 사이트</title>
 
-    <link rel="stylesheet" href="css/sytle.css">
-    <style>
-        /* 게임 섹션 스타일 */
-        .game-section {
-            text-align: center;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        
-        .game-container {
-            display: inline-block;
-            border: 5px solid #333;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            background: #000;
-        }
-        
-        #game-canvas {
-            display: block;
-        }
-        
-        .game-title {
-            color: #4CAF50;
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .game-description {
-            color: #666;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .game-controls {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            display: inline-block;
-        }
-        
-        .game-controls h4 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        
-        .game-controls p {
-            margin: 5px 0;
-            font-size: 13px;
-            color: #555;
-        }
-        
-        .start-game-btn {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin: 10px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .start-game-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
-        }
-        
-        .start-game-btn:active {
-            transform: scale(0.95);
-        }
-    </style>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.game-section{
+    text-align:center;
+    margin:40px auto;
+    padding:20px;
+}
+
+.game-container{
+    display:inline-block;
+    border:5px solid #333;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    background:#000;
+}
+
+.game-title{
+    color:#4CAF50;
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.game-description{
+    color:#666;
+    margin-bottom:20px;
+}
+
+.game-controls{
+    background:#f5f5f5;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+    display:inline-block;
+}
+
+.start-game-btn{
+    background:linear-gradient(135deg,#4CAF50,#45a049);
+    color:white;
+    border:none;
+    padding:15px 40px;
+    font-size:20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+</style>
+
 </head>
+
+
 <body>
-    <header>
-        <h1>엄청난 사이트</h1>
-        <hr>
-    </header>
-    <main>
-        <section>
-            <h3>만든이유</h3>
-            <ul>
-            <li>심심해서</li> 
-            <li>심삼해서</li>
-            <li>수수해서</li>
-            <li>싱싱해서</li>
-            <li>숨숨해서</li>
-            <li>삼삼해서</li>
-        </section>
-    
-        </ul>
-        <br>
-        <br>
-        <br>
-        <h2>버튼</h2>
-        <hr>
-        <div class="btn-row">
-            <button class="big-btn" onclick="hello()">live live star star person I see</button>
-            <p id="msg1"></p>
 
-            <button class="big-btn" onclick="hello2()">이</button>
-            <p id="msg2"></p>
-
-            <button class="big-btn" onclick="hello3()">천</button>
-            <p id="msg3"></p>
-        </div>
-
-        <div class="haha">
-            <button class="big-btn2" onclick="hello4()">응</button>
-            <p id="msg4"></p>
-
-            <button class="big-btn2" onclick="hello5()">마</button>
-            <p id="msg5"></p>
-        </div>
-
-        <div class="hoho">
-            <button class="big-btn3" onclick="hello6(event)">이걸 본 지우 머리속(클릭하셈)</button>
-            <p id="msg6"></p>
-
-            <button class="big-btn3" onclick="hello7(event)">._.</button>
-            <p id="msg7"></p>
-        </div>
-
-        <div class="hihi">
-            <button class="big-btn4" onclick="hello8(event)">이걸 본 내 머리속</button>
-            <p id="msg8"></p>
-
-            <button class="big-btn4" onclick="hello8(event)">>_<</button>
-            <p id="msg8"></p>
-        </div>
-        <br>
-        <br>
-        <br>
-
-        <h2>사진(?)</h2>
-        <hr>
-        <h3>아보카도추가추가</h3>
-        <img width="400" src="jpg/avocado-6931344_1280.jpg" alt="아보카도추가추가" />
-
-        <br>
-        <br>
-        <br>
-        
-        <h2>플렉스</h2>
-        <hr>
+<header>
+<h1>엄청난 사이트</h1>
+<hr>
+</header>
 
 
-         <div style="display:flex">
-            <div class="flex-container flex-start">
-            <div class="flex-item color-red" onclick="hello8(event)">1</div>
-            <div class="flex-item color-red" onclick="hello8(event)">2</div>
-            <div class="flex-item color-red" onclick="hello8(event)">3</div>
-            <div class="flex-item color-red" onclick="hello8(event)">4</div>
-        </div>
+<main>
 
-        <div class="flex-container flex-end">
-            <div class="flex-item color-blue" onclick="hello8(event)">1</div>
-            <div class="flex-item color-blue" onclick="hello8(event)">2</div>
-            <div class="flex-item color-blue" onclick="hello8(event)">3</div>
-            <div class="flex-item color-blue" onclick="hello8(event)">4</div>
-        </div>
+<section>
+<h3>만든이유</h3>
 
-        <div class="flex-container center">
-            <div class="flex-item color-green" onclick="hello8(event)">1</div>
-            <div class="flex-item color-green" onclick="hello8(event)">2</div>
-            <div class="flex-item color-green" onclick="hello8(event)">3</div>
-            <div class="flex-item color-green" onclick="hello8(event)">4</div>
-        </div>
+<ul>
+<li>심심해서</li>
+<li>심삼해서</li>
+<li>수수해서</li>
+<li>싱싱해서</li>
+<li>숨숨해서</li>
+<li>삼삼해서</li>
+</ul>
 
-        <div class="flex-container space-between">
-            <div class="flex-item color-yellow" onclick="hello8(event)">1</div>
-            <div class="flex-item color-yellow" onclick="hello8(event)">2</div>
-            <div class="flex-item color-yellow" onclick="hello8(event)">3</div>
-            <div class="flex-item color-yellow" onclick="hello8(event)">4</div>
-        </div>
+</section>
 
-        <div class="flex-container space-around">
-            <div class="flex-item color-pupple" onclick="hello8(event)">1</div>
-            <div class="flex-item color-pupple" onclick="hello8(event)">2</div>
-            <div class="flex-item color-pupple" onclick="hello8(event)">3</div>
-            <div class="flex-item color-pupple" onclick="hello8(event)">4</div>
-        </div>
+<br><br><br>
 
-        <div class="flex-container space-evenly">
-            <div class="flex-item color-orange" onclick="hello8(event)">1</div>
-            <div class="flex-item color-orange" onclick="hello8(event)">2</div>
-            <div class="flex-item color-orange" onclick="hello8(event)">3</div>
-            <div class="flex-item color-orange" onclick="hello8(event)">4</div>
-        </div>
-        <br>
-        <br>
-        <br>
 
-        <div>
-            <h2>엄청난 게임</h2>
-            <hr>
-            <section class="game-section">
-            <h3 class="game-title">🐸 Doodle Jump 🚀</h3>
-            <p class="game-description">올라가셈</p>
-            
-            <div class="game-container">
-                <div id="game-canvas"></div>
-            </div>
-            
-            <div class="game-controls">
-                <h4> 조작법</h4>
-                <p>⬅️ ➡️ : 좌우 이동</p>
-                <p>SPACE : 총알 발사 🔫</p>
-                <p>📱 터치: 화면 좌/우 터치로 이동</p>
-            </div>
-        </section>
+<h2>버튼</h2>
+<hr>
 
-        </div>
+<div class="btn-row">
+
+<button class="big-btn" onclick="hello()">live live star star person I see</button>
+<p id="msg1"></p>
+
+<button class="big-btn" onclick="hello2()">이</button>
+<p id="msg2"></p>
+
+<button class="big-btn" onclick="hello3()">천</button>
+<p id="msg3"></p>
 
 </div>
 
-        <script src="js/script.js"></script>
-        <script src="js/script2.js"></script>
-        <script src="js/script3.js"></script>
-        <script src="js/script4.js"></script>
-        <script src="js/script5.js"></script>
-        <script src="js/script6.js"></script>
-        <script src="js/script7.js"></script>
-        <script src="js/script8.js"></script>
-        <script src="js/script9.js"></script>
 
-        <!-- Phaser 게임 엔진 -->
-        <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
-        <!-- 게임 코드 -->
-        <script src="js/doodle-jump-game.js"></script>
+<div class="haha">
 
-    </main>
+<button class="big-btn2" onclick="hello4()">응</button>
+<p id="msg4"></p>
+
+<button class="big-btn2" onclick="hello5()">마</button>
+<p id="msg5"></p>
+
+</div>
+
+
+<div class="hoho">
+
+<button class="big-btn3" onclick="hello6(event)">이걸 본 지우 머리속(클릭하셈)</button>
+<p id="msg6"></p>
+
+<button class="big-btn3" onclick="hello7(event)">._.</button>
+<p id="msg7"></p>
+
+</div>
+
+
+<div class="hihi">
+
+<button class="big-btn4" onclick="hello8(event)">이걸 본 내 머리속</button>
+<p id="msg8"></p>
+
+<button class="big-btn4" onclick="hello8(event)">>_<</button>
+<p id="msg9"></p>
+
+</div>
+
+
+<br><br><br>
+
+
+<h2>사진(?)</h2>
+<hr>
+
+<h3>아보카도추가추가</h3>
+
+<img width="400" src="jpg/avocado-6931344_1280.jpg">
+
+
+<br><br><br>
+
+
+<h2>플렉스</h2>
+<hr>
+
+
+<div style="display:flex">
+
+<div class="flex-container flex-start">
+<div class="flex-item color-red" onclick="hello8(event)">1</div>
+<div class="flex-item color-red" onclick="hello8(event)">2</div>
+<div class="flex-item color-red" onclick="hello8(event)">3</div>
+<div class="flex-item color-red" onclick="hello8(event)">4</div>
+</div>
+
+
+<div class="flex-container flex-end">
+<div class="flex-item color-blue" onclick="hello8(event)">1</div>
+<div class="flex-item color-blue" onclick="hello8(event)">2</div>
+<div class="flex-item color-blue" onclick="hello8(event)">3</div>
+<div class="flex-item color-blue" onclick="hello8(event)">4</div>
+</div>
+
+
+<div class="flex-container center">
+<div class="flex-item color-green" onclick="hello8(event)">1</div>
+<div class="flex-item color-green" onclick="hello8(event)">2</div>
+<div class="flex-item color-green" onclick="hello8(event)">3</div>
+<div class="flex-item color-green" onclick="hello8(event)">4</div>
+</div>
+
+
+<div class="flex-container space-between">
+<div class="flex-item color-yellow" onclick="hello8(event)">1</div>
+<div class="flex-item color-yellow" onclick="hello8(event)">2</div>
+<div class="flex-item color-yellow" onclick="hello8(event)">3</div>
+<div class="flex-item color-yellow" onclick="hello8(event)">4</div>
+</div>
+
+
+<div class="flex-container space-around">
+<div class="flex-item color-pupple" onclick="hello8(event)">1</div>
+<div class="flex-item color-pupple" onclick="hello8(event)">2</div>
+<div class="flex-item color-pupple" onclick="hello8(event)">3</div>
+<div class="flex-item color-pupple" onclick="hello8(event)">4</div>
+</div>
+
+
+<div class="flex-container space-evenly">
+<div class="flex-item color-orange" onclick="hello8(event)">1</div>
+<div class="flex-item color-orange" onclick="hello8(event)">2</div>
+<div class="flex-item color-orange" onclick="hello8(event)">3</div>
+<div class="flex-item color-orange" onclick="hello8(event)">4</div>
+</div>
+
+</div>
+
+
+<br><br><br>
+
+
+<h2>엄청난 게임</h2>
+<hr>
+
+
+<section class="game-section">
+
+<h3 class="game-title">🐸 Doodle Jump 🚀</h3>
+
+<p class="game-description">
+올라가셈
+</p>
+
+
+<div class="game-container">
+
+<div id="game-canvas"></div>
+
+</div>
+
+
+<div class="game-controls">
+
+<h4>조작법</h4>
+
+<p>⬅️ ➡️ : 좌우 이동</p>
+<p>SPACE : 총알 발사 🔫</p>
+<p>📱 터치 : 화면 좌/우 이동</p>
+
+</div>
+
+</section>
+
+
+
+<!-- JS -->
+
+<script src="js/script.js"></script>
+<script src="js/script2.js"></script>
+<script src="js/script3.js"></script>
+<script src="js/script4.js"></script>
+<script src="js/script5.js"></script>
+<script src="js/script6.js"></script>
+<script src="js/script7.js"></script>
+<script src="js/script8.js"></script>
+<script src="js/script9.js"></script>
+
+
+<!-- Phaser -->
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+
+<!-- 게임 -->
+<script src="js/doodle-jump-game.js"></script>
+
+
+</main>
+
 </body>
-    
 </html>
+```
