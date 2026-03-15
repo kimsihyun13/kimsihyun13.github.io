@@ -77,51 +77,51 @@ this.cursors=this.input.keyboard.createCursorKeys()
 // 충돌
 this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
 
+// 시작 UI
 this.createStartUI()
 
 }
 
 createStartUI(){
 
-const centerX = GAME_CONFIG.width/2
-const centerY = GAME_CONFIG.height/2
-
-this.startPanel = this.add.rectangle(
-centerX,
-centerY,
-260,
-140,
-0xffffff,
-0.25
-)
-.setStrokeStyle(2,0xffffff)
-.setScrollFactor(0)
-
-this.startText = this.add.text(
-centerX,
-centerY,
-"탭 하여 시작",
+const title = this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2 - 60,
+"DOODLE JUMP",
 {
-fontSize:"28px",
+fontSize:"40px",
 color:"#222",
 fontStyle:"bold"
 }
-)
-.setOrigin(0.5)
-.setScrollFactor(0)
+).setOrigin(0.5)
 
-this.tweens.add({
-targets:this.startText,
-scale:1.05,
-duration:800,
-yoyo:true,
-repeat:-1
-})
+const startButton = this.add.rectangle(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2 + 20,
+200,
+60,
+0x4CAF50
+).setInteractive()
 
-this.input.once("pointerdown",()=>{
-this.startPanel.destroy()
-this.startText.destroy()
+const text = this.add.text(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2 + 20,
+"START",
+{
+fontSize:"26px",
+color:"#ffffff",
+fontStyle:"bold"
+}
+).setOrigin(0.5)
+
+startButton.on("pointerdown",()=>{
+
+title.destroy()
+startButton.destroy()
+text.destroy()
+
 this.gameStarted=true
+
 })
 
 }
@@ -184,7 +184,7 @@ player.body.setVelocityY(-GAME_CONFIG.jumpPower*1.6)
 
 platform.setTexture('springPlatformCompressed')
 
-this.time.delayedCall(200,()=>{
+this.time.delayedCall(200(()=>{
 if(platform.active){
 platform.setTexture('springPlatform')
 }
@@ -195,6 +195,17 @@ break
 }
 
 }
+
+}
+
+getPlatformType(){
+
+const r=Phaser.Math.Between(1,100)
+
+if(r < 55) return "normal"
+if(r < 75) return "moving"
+if(r < 90) return "breaking"
+return "spring"
 
 }
 
@@ -229,10 +240,23 @@ while(this.lastPlatformY > this.cameras.main.scrollY - 100){
 this.lastPlatformY -= GAME_CONFIG.platformSpacing
 
 const x = Phaser.Math.Between(50,GAME_CONFIG.width-50)
+const type = this.getPlatformType()
 
-this.createPlatform(x,this.lastPlatformY,'normal')
+this.createPlatform(x,this.lastPlatformY,type)
 
 }
+
+// moving 플랫폼 이동
+this.platforms.children.each(p=>{
+
+if(p.platformType==='moving'){
+
+if(p.x < 30) p.body.setVelocityX(80)
+if(p.x > GAME_CONFIG.width-30) p.body.setVelocityX(-80)
+
+}
+
+})
 
 // 화면 바닥 Game Over
 const screenBottom = this.cameras.main.scrollY + GAME_CONFIG.height
@@ -250,16 +274,16 @@ this.gameOver=true
 const centerX = GAME_CONFIG.width/2
 const centerY = this.cameras.main.scrollY + GAME_CONFIG.height/2
 
-const overlay = this.add.rectangle(
+this.add.rectangle(
 centerX,
 centerY,
 GAME_CONFIG.width,
 GAME_CONFIG.height,
 0x000000,
-0.55
+0.6
 )
 
-const text = this.add.text(
+this.add.text(
 centerX,
 centerY-40,
 "GAME OVER",
@@ -270,29 +294,21 @@ fontStyle:"bold"
 }
 ).setOrigin(0.5)
 
-const button = this.add.text(
+const restartButton = this.add.text(
 centerX,
 centerY+40,
-"다시 시작",
+"RESTART",
 {
-fontSize:"22px",
+fontSize:"24px",
 backgroundColor:"#ffffff",
 color:"#000",
-padding:{x:22,y:10}
+padding:{x:20,y:10}
 }
 )
 .setOrigin(0.5)
 .setInteractive()
 
-this.tweens.add({
-targets:button,
-scale:1.08,
-duration:600,
-yoyo:true,
-repeat:-1
-})
-
-button.on("pointerdown",()=>{
+restartButton.on("pointerdown",()=>{
 this.scene.restart()
 })
 
