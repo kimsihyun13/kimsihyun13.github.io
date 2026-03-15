@@ -258,3 +258,10 @@ aside > p {
         .start-game-btn:active {
             transform: scale(0.95);
         }
+
+        .ad_1{
+            margin : 0 auto;
+            width : 300px
+
+
+        }
