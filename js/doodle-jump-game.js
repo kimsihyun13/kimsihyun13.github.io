@@ -31,8 +31,8 @@ this.load.image(key,ASSETS[key])
 
 create(){
 
-this.gameOver=false
 this.gameStarted=false
+this.gameOver=false
 this.lastPlatformY=GAME_CONFIG.height-50
 
 // 배경
@@ -67,7 +67,6 @@ const y=GAME_CONFIG.height-50-(i*GAME_CONFIG.platformSpacing)
 const x=Phaser.Math.Between(60,GAME_CONFIG.width-60)
 
 this.createPlatform(x,y,'normal')
-
 this.lastPlatformY=y
 
 }
@@ -78,24 +77,51 @@ this.cursors=this.input.keyboard.createCursorKeys()
 // 충돌
 this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
 
-// 시작 화면
+this.createStartUI()
+
+}
+
+createStartUI(){
+
+const centerX = GAME_CONFIG.width/2
+const centerY = GAME_CONFIG.height/2
+
+this.startPanel = this.add.rectangle(
+centerX,
+centerY,
+260,
+140,
+0xffffff,
+0.25
+)
+.setStrokeStyle(2,0xffffff)
+.setScrollFactor(0)
+
 this.startText = this.add.text(
-GAME_CONFIG.width/2,
-GAME_CONFIG.height/2,
+centerX,
+centerY,
 "탭 하여 시작",
 {
-fontSize:"32px",
-fill:"#000",
-stroke:"#fff",
-strokeThickness:6
+fontSize:"28px",
+color:"#222",
+fontStyle:"bold"
 }
 )
 .setOrigin(0.5)
 .setScrollFactor(0)
 
+this.tweens.add({
+targets:this.startText,
+scale:1.05,
+duration:800,
+yoyo:true,
+repeat:-1
+})
+
 this.input.once("pointerdown",()=>{
-this.gameStarted=true
+this.startPanel.destroy()
 this.startText.destroy()
+this.gameStarted=true
 })
 
 }
@@ -177,7 +203,7 @@ update(){
 if(!this.gameStarted) return
 if(this.gameOver) return
 
-// 좌우 이동
+// 이동
 if(this.cursors.left.isDown){
 this.player.body.setVelocityX(-GAME_CONFIG.moveSpeed)
 }
@@ -188,7 +214,7 @@ else{
 this.player.body.setVelocityX(0)
 }
 
-// 좌우 순간이동
+// 화면 순간이동
 if(this.player.x<0) this.player.x=GAME_CONFIG.width
 if(this.player.x>GAME_CONFIG.width) this.player.x=0
 
@@ -208,18 +234,6 @@ this.createPlatform(x,this.lastPlatformY,'normal')
 
 }
 
-// moving 발판 이동
-this.platforms.children.each(p=>{
-
-if(p.platformType==='moving'){
-
-if(p.x<30) p.body.setVelocityX(80)
-if(p.x>GAME_CONFIG.width-30) p.body.setVelocityX(-80)
-
-}
-
-})
-
 // 화면 바닥 Game Over
 const screenBottom = this.cameras.main.scrollY + GAME_CONFIG.height
 
@@ -231,49 +245,54 @@ this.triggerGameOver()
 
 triggerGameOver(){
 
-if(this.gameOver) return
-
 this.gameOver=true
 
 const centerX = GAME_CONFIG.width/2
 const centerY = this.cameras.main.scrollY + GAME_CONFIG.height/2
 
-this.add.rectangle(
+const overlay = this.add.rectangle(
 centerX,
 centerY,
 GAME_CONFIG.width,
 GAME_CONFIG.height,
 0x000000,
-0.6
+0.55
 )
 
-this.add.text(
+const text = this.add.text(
 centerX,
 centerY-40,
 "GAME OVER",
 {
 fontSize:"36px",
-fill:"#ff4444",
-stroke:"#ffffff",
-strokeThickness:6
+color:"#ff4444",
+fontStyle:"bold"
 }
 ).setOrigin(0.5)
 
-const restartButton = this.add.text(
+const button = this.add.text(
 centerX,
 centerY+40,
 "다시 시작",
 {
-fontSize:"24px",
+fontSize:"22px",
 backgroundColor:"#ffffff",
-color:"#000000",
-padding:{x:20,y:10}
+color:"#000",
+padding:{x:22,y:10}
 }
 )
 .setOrigin(0.5)
 .setInteractive()
 
-restartButton.on("pointerdown",()=>{
+this.tweens.add({
+targets:button,
+scale:1.08,
+duration:600,
+yoyo:true,
+repeat:-1
+})
+
+button.on("pointerdown",()=>{
 this.scene.restart()
 })
 
