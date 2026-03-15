@@ -197,10 +197,6 @@ class DoodleJumpScene extends Phaser.Scene {
       this.createPowerup(x, y - 50);
     }
 
-    // 가끔 적 생성
-    if (Phaser.Math.Between(1, 100) <= 8) {
-      this.createEnemy(Phaser.Math.Between(60, GAME_CONFIG.width - 60), y - 80);
-    }
 
     return platform;
   }
@@ -273,29 +269,6 @@ class DoodleJumpScene extends Phaser.Scene {
       }
     });
 
-    // 플레이어-적 충돌
-    this.physics.add.overlap(this.player, this.enemies, (player, enemy) => {
-      if (enemy.isDead) return;
-      
-      if (player.body.velocity.y > 0 && player.y < enemy.y) {
-        // 적 밟기
-        enemy.isDead = true;
-        this.tweens.add({
-          targets: enemy,
-          alpha: 0,
-          scaleX: 0.1,
-          scaleY: 0.03,
-          duration: 200,
-          onComplete: () => enemy.destroy()
-        });
-        this.score += 100;
-        this.jump();
-      } else {
-        // 적에게 충돌
-        this.gameOver = true;
-        this.showGameOver();
-      }
-    });
 
     // 플레이어-파워업 충돌
     this.physics.add.overlap(this.player, this.powerups, (player, powerup) => {
