@@ -35,6 +35,10 @@ this.gameStarted=false
 this.gameOver=false
 this.lastPlatformY=GAME_CONFIG.height-50
 
+// 점수
+this.score = 0
+this.maxHeight = GAME_CONFIG.height
+
 // 배경
 this.add.image(
 GAME_CONFIG.width/2,
@@ -43,6 +47,20 @@ GAME_CONFIG.height/2,
 )
 .setDisplaySize(GAME_CONFIG.width,GAME_CONFIG.height)
 .setScrollFactor(0)
+
+// 점수 UI
+this.scoreText = this.add.text(
+10,
+10,
+"Score: 0",
+{
+fontSize:"20px",
+color:"#000",
+fontStyle:"bold",
+stroke:"#fff",
+strokeThickness:4
+}
+).setScrollFactor(0)
 
 // 발판 그룹
 this.platforms=this.add.group()
@@ -71,13 +89,10 @@ this.lastPlatformY=y
 
 }
 
-// 키 입력
 this.cursors=this.input.keyboard.createCursorKeys()
 
-// 충돌
 this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
 
-// 시작 UI
 this.createStartUI()
 
 }
@@ -184,7 +199,7 @@ player.body.setVelocityY(-GAME_CONFIG.jumpPower*1.6)
 
 platform.setTexture('springPlatformCompressed')
 
-this.time.delayedCall(200, ()=>{
+this.time.delayedCall(200,()=>{
 if(platform.active){
 platform.setTexture('springPlatform')
 }
@@ -232,6 +247,16 @@ if(this.player.x>GAME_CONFIG.width) this.player.x=0
 // 카메라
 if(this.player.y < this.cameras.main.scrollY + GAME_CONFIG.height/2){
 this.cameras.main.scrollY = this.player.y - GAME_CONFIG.height/2
+}
+
+// 점수 계산
+if(this.player.y < this.maxHeight){
+
+this.maxHeight = this.player.y
+this.score = Math.floor((GAME_CONFIG.height - this.maxHeight)/10)
+
+this.scoreText.setText("Score: " + this.score)
+
 }
 
 // 발판 생성
@@ -294,9 +319,19 @@ fontStyle:"bold"
 }
 ).setOrigin(0.5)
 
+this.add.text(
+centerX,
+centerY,
+"Score: " + this.score,
+{
+fontSize:"24px",
+color:"#ffffff"
+}
+).setOrigin(0.5)
+
 const restartButton = this.add.text(
 centerX,
-centerY+40,
+centerY+50,
 "RESTART",
 {
 fontSize:"24px",
