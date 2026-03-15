@@ -14,9 +14,7 @@ const ASSETS = {
   breakingPlatform:"https://cdn-game-mcp.gambo.ai/162dd194-6dd7-43fc-b3eb-1eda40f2d9cc/images/cracked_doodle_platform.png",
   movingPlatform:"https://cdn-game-mcp.gambo.ai/e581265e-35e5-4653-9610-cad191a00286/images/uniform_doodle_moving_platform.png",
   springPlatform:"https://cdn-game-mcp.gambo.ai/d8682bc8-0cf9-45e4-a33d-867532ffc196/images/purple_doodle_spring_platform.png",
-  springPlatformCompressed:"https://cdn-game-mcp.gambo.ai/852863f2-0907-452b-8566-1357ec339e61/images/purple_spring_platform_compressed.png",
-  enemy:"https://cdn-game-mcp.gambo.ai/c61509b8-d133-4a47-a226-527b21fe3b0d/images/enemy_monster.png",
-  bullet:"https://cdn-game-mcp.gambo.ai/8a4161b7-32bb-446f-83d8-b9e73ec326d4/images/ultra_tiny_bullet_dot.png"
+  springPlatformCompressed:"https://cdn-game-mcp.gambo.ai/852863f2-0907-452b-8566-1357ec339e61/images/purple_spring_platform_compressed.png"
 };
 
 class DoodleJumpScene extends Phaser.Scene{
@@ -38,11 +36,22 @@ this.score=0
 this.highestY=0
 this.lastPlatformY=GAME_CONFIG.height-50
 
-this.platforms=this.add.group()
-this.bullets=this.add.group()
+// 배경
+this.add.image(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height/2,
+"background"
+)
+.setDisplaySize(GAME_CONFIG.width,GAME_CONFIG.height)
+.setScrollFactor(0)
 
+// 그룹
+this.platforms=this.add.group()
+
+// 플레이어
 this.createPlayer()
 
+// 시작 발판
 this.createPlatform(GAME_CONFIG.width/2,GAME_CONFIG.height-50,'normal')
 
 for(let i=1;i<=6;i++){
@@ -52,24 +61,25 @@ this.createPlatform(x,y,'normal')
 this.lastPlatformY=y
 }
 
+// 키 입력
 this.cursors=this.input.keyboard.createCursorKeys()
-this.spaceKey=this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
 
+// 충돌
 this.physics.add.overlap(this.player,this.platforms,this.platformCollision,null,this)
-
-this.scoreText=this.add.text(10,10,'점수:0',{fontSize:'18px',fill:'#000',stroke:'#fff',strokeThickness:3}).setScrollFactor(0)
 
 }
 
 createPlayer(){
 
-this.player=this.physics.add.sprite(GAME_CONFIG.width/2,GAME_CONFIG.height-150,'player')
+this.player=this.physics.add.sprite(
+GAME_CONFIG.width/2,
+GAME_CONFIG.height-150,
+'player'
+)
 
 this.player.setScale(0.1)
 this.player.setOrigin(0.5,1)
 this.player.body.setGravityY(GAME_CONFIG.gravity)
-
-this.player.facingDirection='right'
 
 }
 
@@ -157,8 +167,12 @@ this.updateMovement()
 this.updateCamera()
 this.generatePlatforms()
 this.updatePlatforms()
-this.updateScore()
 this.checkFall()
+
+// 바닥 닿으면 죽음
+if(this.player.y>=GAME_CONFIG.height-5){
+this.triggerGameOver()
+}
 
 }
 
@@ -166,18 +180,15 @@ updateMovement(){
 
 if(this.cursors.left.isDown){
 this.player.body.setVelocityX(-GAME_CONFIG.moveSpeed)
-this.player.setFlipX(true)
-this.player.facingDirection='left'
 }
 else if(this.cursors.right.isDown){
 this.player.body.setVelocityX(GAME_CONFIG.moveSpeed)
-this.player.setFlipX(false)
-this.player.facingDirection='right'
 }
 else{
 this.player.body.setVelocityX(0)
 }
 
+// 좌우 순간이동
 if(this.player.x<0) this.player.x=GAME_CONFIG.width
 if(this.player.x>GAME_CONFIG.width) this.player.x=0
 
@@ -186,9 +197,7 @@ if(this.player.x>GAME_CONFIG.width) this.player.x=0
 updateCamera(){
 
 if(this.player.y < this.cameras.main.scrollY + GAME_CONFIG.height/2){
-
 this.cameras.main.scrollY = this.player.y - GAME_CONFIG.height/2
-
 }
 
 }
@@ -235,35 +244,61 @@ if(p.x>GAME_CONFIG.width-30) p.body.setVelocityX(-80)
 
 }
 
-updateScore(){
-
-const height=Math.floor((GAME_CONFIG.height-this.player.y)/10)
-
-if(height>this.highestY){
-
-this.highestY=height
-this.score+=10
-
-}
-
-this.scoreText.setText("점수:"+this.score)
-
-}
-
 checkFall(){
 
 if(this.player.y > this.cameras.main.scrollY + GAME_CONFIG.height + GAME_CONFIG.platformSpacing*7){
+this.triggerGameOver()
+}
+
+}
+
+triggerGameOver(){
+
+if(this.gameOver) return
 
 this.gameOver=true
 
+const centerX = GAME_CONFIG.width/2
+const centerY = this.cameras.main.scrollY + GAME_CONFIG.height/2
+
+this.add.rectangle(
+centerX,
+centerY,
+GAME_CONFIG.width,
+GAME_CONFIG.height,
+0x000000,
+0.6
+)
+
 this.add.text(
-GAME_CONFIG.width/2,
-this.cameras.main.scrollY+GAME_CONFIG.height/2,
+centerX,
+centerY-40,
 "GAME OVER",
-{fontSize:'32px',fill:'#ff0000'}
+{
+fontSize:"36px",
+fill:"#ff4444",
+stroke:"#ffffff",
+strokeThickness:6
+}
 ).setOrigin(0.5)
 
+const restartButton = this.add.text(
+centerX,
+centerY+40,
+"다시 시작",
+{
+fontSize:"24px",
+backgroundColor:"#ffffff",
+color:"#000000",
+padding:{x:20,y:10}
 }
+)
+.setOrigin(0.5)
+.setInteractive()
+
+restartButton.on("pointerdown",()=>{
+this.scene.restart()
+})
 
 }
 
