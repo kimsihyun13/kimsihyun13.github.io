@@ -355,13 +355,73 @@ font-size:14px;
 
 /* 게임 가운데 정렬 */
 
-hhh{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .game-container{
     margin-top: 20px;
 }
 
+
+.game{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+    text-align:center;
+    width:320px;
+}
+
+h1{
+    margin-top:0;
+}
+
+input{
+    width:80%;
+    padding:10px;
+    font-size:18px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    text-align:center;
+}
+
+.buttons{
+    margin-top:15px;
+}
+
+button{
+    margin:5px;
+    padding:10px 20px;
+    font-size:16px;
+    border:none;
+    border-radius:10px;
+    background:#667eea;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#5563d1;
+}
+
+#hint{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+
+.game{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+    text-align:center;
+    width:320px;
+
+    margin:40px auto;   /* ← 이것이 중앙 정렬 */
+}
+
+
+.hhh{
+    width: 370px;
+
+    margin:40px auto;   /* ← 이것이 중앙 정렬 */
+}
