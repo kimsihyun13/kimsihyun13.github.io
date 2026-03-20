@@ -1,0 +1,77 @@
+.big-btn:hover {
+    transform: scale(1.05);
+}
+
+.big-btn {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #4b8bff;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn2 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #ff4b4b;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn3 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #ffd54b;
+    color: white;
+    transition: 0.2s;
+}
+
+.big-btn4 {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #db4bff;
+    color: white;
+    transition: 0.2s;
+}
+
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.haha {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.hoho {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.big-btn {
+    padding: 12px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #4b8bff;
+    color: white;
+    transition: 0.2s;
+}
+
