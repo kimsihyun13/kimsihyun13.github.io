@@ -155,3 +155,34 @@ font-size:14px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
     gap: 20px;
 }
+
+
+.logo a {
+    color: #333;
+    text-decoration: none;
+}
+
+.logo a:visited {
+    color: #333;
+}
+
+.logo a:active {
+    color: #333;
+}
+
+.logo a:hover {
+    color: #333;
+}
+
+
+.back{
+    display:inline-block;
+    margin-top:30px;
+    font-size:18px;
+    text-decoration:none;
+    color:#4b8bff;
+}
+
+.back:hover{
+    text-decoration:underline;
+}
