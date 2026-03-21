@@ -1,0 +1,33 @@
+/* css/tank.css */
+.game-container {
+    position: relative;
+    width: auto;
+    margin: 20px auto;
+    background-color: #eee;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#gameCanvas {
+    background-color: #f5f5f5;
+    display: block;
+    cursor: crosshair;
+}
+
+.ui-layer {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    pointer-events: none;
+}
+
+.guide {
+    background: #444;
+    color: white;
+    padding: 5px;
+    font-size: 14px;
+}
