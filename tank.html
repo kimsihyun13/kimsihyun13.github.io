@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>미니 Diep.io - 탱크 키우기</title>
+    <link rel="stylesheet" href="css/a.css">
+    <link rel="stylesheet" href="css/tank.css">
+    <script src="js/tank.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="top-left">
+        <div class="logo"><a href="index.html">시현이의 사이트</a></div>
+        <div class="subtitle">그것은 매우 엄청난</div>
+    </div>
+    <div class="top-right">
+        <div class="search">
+            <input type="text" placeholder="검색창">
+            <button>🔍</button>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <ul>
+        <li><a href="index.html">전체 ▾</a></li>
+        <li><a href="just_coding.html">그냥 코딩 ▾</a></li>
+        <li class="active"><a href="tank.html">탱크 게임 ▾</a></li>
+    </ul>
+</nav>
+
+<main>
+
+        <div class="wt">
+        <div class="game-container">
+            <div class="ui-layer">
+            </div>
+            <canvas id="gameCanvas"></canvas>
+            <div class="guide">이 게임의 목표는 밀려오는 적들을 물리치고, 맵 끝에 있는 **적의 본거지(Base)**를 파괴하며 끝없이 강해지는 것입니다.1. 핵심 플레이 방식조작: W, A, S, D 키로 이동하고, 마우스로 방향을 조준합니다.공격: 마우스 왼쪽 버튼을 꾹 누르거나, E 키를 눌러 자동 사격 모드를 켤 수 있습니다.성장: 적을 처치해서 점수를 얻을수록 내 캐릭터가 실시간으로 강해집니다.2. "성장형" 시스템 (RPG 요소)시현님의 요청으로 들어간 가장 중요한 특징이에요.체력 증폭: 점수 500점당 최대 체력($maxHp$)이 10씩 늘어납니다. (탱커가 되어가는 과정!)초고속 연사: 점수 100점당 총알이 나가는 간격이 2ms씩 줄어듭니다. 처음엔 탕... 탕... 쏘다가 나중에는 드르르르륵! 하는 기관총이 됩니다.피 흡수(Life Steal): 적을 처치할 때마다 체력이 2씩 회복됩니다. 쉬지 않고 싸울수록 더 오래 살아남을 수 있어요.3. 스테이지와 적들적의 기지: 오른쪽 끝에 있는 빨간 네모가 기지입니다. 이걸 부수면 STAGE가 올라갑니다.적의 종류:일반 적(빨강): 평범한 속도와 체력.단단한 적(주황): 체력이 조금 더 높고 묵직합니다.엘리트 적(보라): 체력이 매우 높고 공격적입니다.난이도: 스테이지가 높아질수록 기지의 체력이 늘어나고, 강한 적들이 더 많이 소환됩니다.4. 미니맵 활용화면 우측 하단의 작은 지도를 보세요!파란 점: 현재 나의 위치빨간 네모: 파괴해야 할 적 기지의 위치지도를 보고 기지가 있는 방향(오른쪽)으로 전진하며 적을 소탕하면 됩니다.</div>
+        </div>
+    </div>
+    <br>
+    <a href="index.html" class="back">← 메인으로</a>
+</main>
+
+</body>
+</html>
